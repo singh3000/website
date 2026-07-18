@@ -16,7 +16,7 @@ body{
 .page-container{overflow: hidden;} /* Prevents unwanted scroll space when scroll FX used. */
 a,button{transition: background .3s ease-in-out;outline: none!important;} /* Prevent blue selection glow on Chrome and Safari */
 a:hover{text-decoration: none; cursor:pointer;}
-.scroll-fx-lock-init{position:fixed!important;top: 0;bottom: 0;left: :0;right: 0;z-index:99999;} /* ScrollFX Lock */
+.scroll-fx-lock-init{position:fixed!important;top: 0;bottom: 0;left: 0;right: 0;z-index:99999;} /* ScrollFX Lock */
 .blocs-grid-container{display: grid!important;grid-template-columns: 1fr 1fr;grid-template-rows: auto auto;column-gap: 1.5rem;row-gap: 1.5rem;} /* CSS Grid */
 nav .dropdown-menu .nav-link{color:rgba(0,0,0,0.6)!important;} /* Maintain Downdown Menu Link Color in Navigation */
 [data-bs-theme="dark"] nav .dropdown-menu .nav-link{color:var(--bs-dropdown-link-color)!important;} /* Maintain Downdown Menu Link Color in Navigation in Darkmode */
@@ -512,11 +512,6 @@ nav .dropdown-menu .nav-link{color:rgba(0,0,0,0.6)!important;} /* Maintain Downd
 	background:rgba(0,0,0,.3);
 }
 
-/* Prevent ugly blue glow on chrome and safari */
-button{
-	outline: none!important;
-}
-
 .btn-rd{
 	border-radius: 40px;
 }
@@ -525,14 +520,14 @@ button{
 	border-bottom-color:rgba(0,0,0,.2);
 	text-shadow:0 1px 0 rgba(0,0,1,.2);
 	box-shadow: 0 1px 3px rgba(0,0,1,.35), inset 0 1px 0 0 rgba(255,255,255,.4), inset 0 1px 0 2px rgba(255,255,255,.08);
-	background-image: -moz-linear-gradient(bottom, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%);
-	 background-image: -o-linear-gradient(bottom, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%);
-	background-image: -webkit-linear-gradient(bottom, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%);
 	background-image: linear-gradient(bottom, rgba(0,0,0,.07) 0%, rgba(255,255,255,.07) 100%);
+}
+.btn-glossy:focus{
+	box-shadow: 0 1px 3px rgba(0,0,1,.35), inset 0 1px 0 0 rgba(255,255,255,.4), inset 0 1px 0 2px rgba(255,255,255,.08)!important;
 }
 
 
-/*  Image Protection */
+/* Image Protection */
 .img-protected{
 	-webkit-touch-callout: none;
 }
@@ -581,14 +576,6 @@ button{
 }
 }
 
-/* = Forms
--------------------------------------------------------------- */
-
-.form-control{
-	border-color:rgba(0,0,0,.1);
-	box-shadow:none;
-}
-
 
 
 /* ScrollToTop button */
@@ -598,10 +585,10 @@ button{
 	height:36px;
 	padding:5px;
 	position:fixed;
-	bottom:20px;
-	right:20px;
+	bottom:1rem;
+	right:1rem;
 	opacity:0;
-	z-index:999;
+	z-index:999999;
 	transition: all .3s ease-in-out;
 	pointer-events:none;
 }
@@ -616,69 +603,82 @@ button{
 	fill-rule: evenodd;
 	stroke-linecap:round;
 }
-/* = iPad Pro Devices
+/* = iPad Air / Pro Devices
 -------------------------------------------------------------- */
 
-.blocsapp-device-ipad-pro{
+.blocsapp-device-ipad-pro, .blocsapp-device-ipad-air{
 	background-repeat:no-repeat;
 	background-size:contain;
 	background-position:center;
 	display:block;
 	width:100%;
 	height:auto;
-	padding:7%}.blocsapp-device-ipad-pro img{
+	padding:7%}.blocsapp-device-ipad-pro img,.blocsapp-device-ipad-air img{
 	width:100%;
 	height:auto;
 	margin:0 auto;
-	border-radius:2%/3%}.blocsapp-device-ipad-pro .ratio{
+	border-radius:2%/3%}.blocsapp-device-ipad-pro .ratio, .blocsapp-device-ipad-air .ratio{
 	width:100%;
 	left:0;
 	border-radius:3%/2%;
 }
-.blocsapp-device-ipad-pro .ratio::before{
+.blocsapp-device-ipad-pro .ratio::before,.blocsapp-device-ipad-air .ratio::before{
 	padding-top: 106.25%;
 }
-.blocsapp-device-ipad-pro.ipad-pro-portrait{
-	padding:9%}.blocsapp-device-ipad-pro.ipad-pro-portrait img{
-	border-radius:3%/2%}.blocsapp-device-ipad-pro.ipad-pro-portrait .ratio{
+.blocsapp-device-ipad-pro.ipad-pro-portrait,.blocsapp-device-ipad-air.ipad-air-portrait{
+	padding:9%}.blocsapp-device-ipad-pro.ipad-pro-portrait img,.blocsapp-device-ipad-air.ipad-air-portrait img{
+	border-radius:3%/2%}.blocsapp-device-ipad-pro.ipad-pro-portrait .ratio, .blocsapp-device-ipad-air.ipad-air-portrait .ratio{
 	padding-bottom:35%;
 }
-.blocsapp-device-ipad-pro.ipad-pro-portrait{
-	background-image:url("img/Apple-iPad-Pro-Portrait.png");
-	background-image: -webkit-image-set(url("img/Apple-iPad-Pro-Portrait.webp") 1x,
-url("img/Apple-iPad-Pro-Portrait.webp") 2x);background-image: image-set(url("img/Apple-iPad-Pro-Portrait.png") 1x,
-url("img/Apple-iPad-Pro-Portrait.png") 2x,url("img/Apple-iPad-Pro-Portrait.webp") 1x,
-url("img/Apple-iPad-Pro-Portrait.webp") 2x);
+.blocsapp-device-ipad-pro.ipad-pro-portrait.ipad-pro-silver{
+	background-image:url("img/apple-ipad-pro-portrait-silver.png");
+	background-image: -webkit-image-set(url("img/apple-ipad-pro-portrait-silver.webp") 1x,
+url("img/apple-ipad-pro-portrait-silver.webp") 2x);background-image: image-set(url("img/apple-ipad-pro-portrait-silver.png") 1x,
+url("img/apple-ipad-pro-portrait-silver.png") 2x,url("img/apple-ipad-pro-portrait-silver.webp") 1x,
+url("img/apple-ipad-pro-portrait-silver.webp") 2x);
 }
 /* = Lightbox
 -------------------------------------------------------------- */
 
-a[data-lightbox]{
-	position: relative;
-	display: block;
-	text-align: center;
+a[data-lightbox] {
+	display: grid;
+	text-decoration: none;
 }
-a[data-lightbox]:hover::before{
-	content:"+";
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial;
-	font-size:32px;
-	line-height: 42px;
-	width:50px;
-	height:50px;
-	margin-left:-25px;
-	border-radius: 50%;
-	background:rgba(0,0,0,.5);
+a[data-lightbox]::before,a[data-lightbox] > img,a[data-lightbox] > picture {
+	grid-area: 1 / 1;
+}
+a[data-lightbox]::before{
+	content: "+";
+	font-family: Helvetica, Arial;
 	color:#FFF;
+	font-size:32px;
 	font-weight:100;
+	line-height: 0px;
+	display: grid;
+	place-items: center;
+	width: 50px;
+	height: 50px;
+	padding-bottom:5px;
+	background: rgba(0,0,0,.5);
+	backdrop-filter:blur(5px);
+	-webkit-backdrop-filter:blur(5px);
+	border-radius: 50%;
+	justify-self: center;
+	align-self: center;
+	pointer-events: none;
+	transform:scale(0.6);
+	opacity: 0;
 	z-index: 1;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
+	transition: all .2s ease-in-out;
+}
+a[data-lightbox]:hover::before {
+	opacity: 1;
+	transform:scale(1);
+	transition: all .2s ease-in-out;
 }
 a[data-lightbox]:hover img{
-	opacity: 0.6;
+	opacity: 0.8;
+	transition: all .2s ease-in-out;
 	-webkit-animation-fill-mode: none;
 	animation-fill-mode:none;
 }
@@ -726,11 +726,6 @@ a[data-lightbox]:hover img{
 }
 .lightbox-close-svg{
 	pointer-events:none;
-}
-
-/* Hide Object */
-.object-hidden{
-	display:none;
 }
 
 /* = Custom Styling
@@ -992,9 +987,6 @@ h1,h2,h3,h4,h5,h6{
 .h6-style{
 	font-size:15px;
 }
-.h6-2-style{
-	font-size:15px;
-}
 .h5-bloc-19-style{
 	font-size:15px;
 }
@@ -1088,7 +1080,13 @@ h1,h2,h3,h4,h5,h6{
 
 /* Button colour styles */
 
-.btn-c-7376{
+.bgc-7376{
+	background-color:var(--swatch-var-7376);
+}
+.tc-7376{
+	color:var(--swatch-var-7376)!important;
+}
+.btn-c-7376,.btn-c-7376:focus{
 	background:var(--swatch-var-7376);
 	color:#FFFFFF!important;
 }
@@ -1096,7 +1094,69 @@ h1,h2,h3,h4,h5,h6{
 	background:#000000!important;
 	color:#FFFFFF!important;
 }
-.btn-c-3409{
+.bgc-7376{
+	background-color:var(--swatch-var-7376);
+}
+.tc-7376{
+	color:var(--swatch-var-7376)!important;
+}
+.btn-c-7376,.btn-c-7376:focus{
+	background:var(--swatch-var-7376);
+	color:#FFFFFF!important;
+}
+.btn-c-7376:hover{
+	background:#000000!important;
+	color:#FFFFFF!important;
+}
+.wire-btn-c-7376{
+	color:var(--swatch-var-7376)!important;
+	border-color:var(--swatch-var-7376)!important;
+}
+.ltc-7376{
+	color:var(--swatch-var-7376)!important;
+}
+.ltc-7376:hover{
+	color:#000000!important;
+}
+.icon-7376{
+	color:var(--swatch-var-7376)!important;
+	border-color:var(--swatch-var-7376)!important;
+}
+/**/.bgc-6728{
+	background-color:var(--swatch-var-6728);
+}
+.tc-6728{
+	color:var(--swatch-var-6728)!important;
+}
+.btn-c-6728,.btn-c-6728:focus{
+	background:var(--swatch-var-6728);
+	color:rgba(0,0,0,.5)!important;
+}
+.btn-c-6728:hover{
+	background:#CCCCCC!important;
+	color:rgba(0,0,0,.5)!important;
+}
+.wire-btn-c-6728{
+	color:var(--swatch-var-6728)!important;
+	border-color:var(--swatch-var-6728)!important;
+}
+.ltc-6728{
+	color:var(--swatch-var-6728)!important;
+}
+.ltc-6728:hover{
+	color:#CCCCCC!important;
+}
+.icon-6728{
+	color:var(--swatch-var-6728)!important;
+	border-color:var(--swatch-var-6728)!important;
+}
+/**/.bgc-3409{
+	background-color:var(--swatch-var-3409);
+}
+.tc-3409{
+	color:var(--swatch-var-3409)!important;
+}
+.btn-c-3409,.btn-c-3409:focus{
 	background:var(--swatch-var-3409);
 	color:#FFFFFF!important;
 }
@@ -1118,15 +1178,31 @@ h1,h2,h3,h4,h5,h6{
 
 .bg-decks-2{
 	background-image:url("img/decks-2.jpg");
+	background-image: -webkit-image-set(url("img/decks-2.webp") 1x,
+url("img/decks-2.webp") 2x);background-image: image-set(url("img/decks-2.jpg") 1x,
+url("img/decks-2.jpg") 2x,url("img/decks-2.webp") 1x,
+url("img/decks-2.webp") 2x);
 }
 .bg-hd-20main{
 	background-image:url("img/hd%20main.jpeg");
+	background-image: -webkit-image-set(url("img/hd%20main.webp") 1x,
+url("img/hd%20main.webp") 2x);background-image: image-set(url("img/hd%20main.jpeg") 1x,
+url("img/hd%20main.jpeg") 2x,url("img/hd%20main.webp") 1x,
+url("img/hd%20main.webp") 2x);
 }
 .bg-coding-20{
 	background-image:url("img/coding%20.jpg");
+	background-image: -webkit-image-set(url("img/coding%20.webp") 1x,
+url("img/coding%20.webp") 2x);background-image: image-set(url("img/coding%20.jpg") 1x,
+url("img/coding%20.jpg") 2x,url("img/coding%20.webp") 1x,
+url("img/coding%20.webp") 2x);
 }
 .bg-heart-20background{
 	background-image:url("img/heart%20background.jpg");
+	background-image: -webkit-image-set(url("img/heart%20background.webp") 1x,
+url("img/heart%20background.webp") 2x);background-image: image-set(url("img/heart%20background.jpg") 1x,
+url("img/heart%20background.jpg") 2x,url("img/heart%20background.webp") 1x,
+url("img/heart%20background.webp") 2x);
 }
 
 /* = Custom Bric Data
@@ -1148,6 +1224,14 @@ h1,h2,h3,h4,h5,h6{
 	filter: drop-shadow(0px 6px 2px rgba(0,0,0,0.3));
 	overflow: visible;
 }
+
+
+/* = Toggle Visibility
+-------------------------------------------------------------- */
+
+.toggled-item{transition: height 350ms ease-in-out, padding 350ms ease-in-out, opacity 350ms ease-in-out;overflow: hidden;}
+.toggled-item-hidden{padding-top:0!important;padding-bottom:0!important;border-top:0!important;border-bottom:0!important;outline:0!important;opacity: 0;}
+.object-hidden{display:none;}
 
 
 /* = Bloc Padding Multi Breakpoint
@@ -1228,6 +1312,7 @@ h1,h2,h3,h4,h5,h6{
 	   height: 320px;
     }
 }
+
 
 @media (max-width: 991px){
 	.grid-event-item{
@@ -1509,9 +1594,6 @@ h1,h2,h3,h4,h5,h6{
 		margin-right:auto;
 	}
 	.h6-style{
-		font-size:10px;
-	}
-	.h6-2-style{
 		font-size:10px;
 	}
 	.h5-4-style{

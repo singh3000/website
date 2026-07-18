@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function()
 
 	// Internet Explorer & Safari Polyfill .ScrollTo() - Animates
 	scrollToPolyFill();
-})
+});
 
 // Loading page complete
 window.addEventListener("load", function() 
@@ -41,7 +41,7 @@ window.addEventListener("load", function()
 	window.addEventListener("scroll", function() {
 		inViewCheck();
 		scrollBtnVisible();
-		stickyNavToggle();
+		stickyBlocs();
 	});	
 
 	var preloader = document.getElementById('page-loading-blocs-notifaction');
@@ -51,7 +51,7 @@ window.addEventListener("load", function()
 	{
 		preloader.classList.add('preloader-complete');
 	}
-})
+});
 
 // Set Up Special NavBars 
 function setUpSpecialNavs()
@@ -81,19 +81,21 @@ function setUpSpecialNavs()
 					}
 
 					// Add menu HTML
-					document.querySelector(".page-container").insertAdjacentHTML("beforebegin","<div class=\"blocsapp-special-menu "+navClasses+"\"><blocsnav class=\""+menuClasses+"\">"+menuHTML+"</div>");
+					document.querySelector(".page-container").insertAdjacentHTML("beforebegin","<div class=\"blocsapp-special-menu "+navClasses+"\"><blocsnav tabindex=\"-1\" class=\""+menuClasses+"\">"+menuHTML+"</div>");
+					
 
 					// Add close button
-					document.querySelector("blocsnav").insertAdjacentHTML("afterbegin","<a class=\"close-special-menu animated fadeIn animDelay06\"><div class=\"close-icon\"></div></a>");
+					document.querySelector("blocsnav").insertAdjacentHTML("afterbegin","<a tabindex=\"0\" class=\"close-special-menu animated fadeIn animDelay06\"><div class=\"close-icon\"></div></a>");
 					
 					animateNavItems();
-					document.querySelector("blocsnav").querySelectorAll(".dropdown").forEach(function(dropdown){addDropdownEvent(dropdown);})
+					document.querySelector("blocsnav").querySelectorAll(".dropdown").forEach(function(dropdown){addDropdownEvent(dropdown);});
 					setTimeout(function()
 					{
 						document.querySelector(".blocsapp-special-menu blocsnav").classList.add("open");
 						document.querySelector(".content-tint").classList.add("on");
 						document.body.classList.add("lock-scroll");
-
+						document.body.classList.add("lock-scroll");
+						document.querySelector("blocsnav").focus();
 					}, 10);
 				}
 				else // Close menu
@@ -113,6 +115,7 @@ function setUpSpecialNavs()
 		})	
 	});
 
+
 	// Handle special menu link click
 	delegateSelector('body', "click", '.blocsapp-special-menu a', function(e)
 	{
@@ -129,7 +132,7 @@ function setUpSpecialNavs()
 			}
 			
 			hideNav();
-		} 
+		}  
 	});
 
 	// Handle tint and close button touch events
@@ -137,14 +140,6 @@ function setUpSpecialNavs()
 	{
 		hideNav();
 	});
-
-	// Hide special navigation menu
-	function hideNav()
-	{
-		document.querySelector('.content-tint').classList.remove("on");
-		document.querySelector('.selected-nav').click();
-		setTimeout(function(){document.querySelector('.content-tint').remove();}, 10);
-	}
 
 	// Animate Nav Items
 	function animateNavItems()
@@ -177,6 +172,14 @@ function setUpSpecialNavs()
 			}
 		});
 	}
+}
+
+// Hide special navigation menu
+function hideNav()
+{
+	document.querySelector('.content-tint').classList.remove("on");
+	document.querySelector('.selected-nav').click();
+	setTimeout(function(){document.querySelector('.content-tint').remove();}, 10);
 }
 
 // Extra Nav Functions
@@ -266,10 +269,14 @@ function scrollToTarget(D,T)
 		}
 	}
 
-	if (T.matches("[data-scroll-speed]")) // Use assigned scroll speed
+	if (T) // Trigger Item Valid
 	{
-		speed = parseInt(T.getAttribute("data-scroll-speed"));
+		if (T.matches("[data-scroll-speed]")) // Use assigned scroll speed
+		{
+			speed = parseInt(T.getAttribute("data-scroll-speed"));
+		}
 	}
+	
 
 	// Start Scroll Animation
     var time = Math.max(.1, Math.min(Math.abs(scrollY - scrollTargetY) / speed, .8));
@@ -296,58 +303,125 @@ function scrollToTarget(D,T)
     animateFrame();
 }
 
-// Sticky Nav Bar Toggle On / Off
-function stickyNavToggle()
+
+// Handle Sticky Blocs
+function stickyBlocs()
 {
-	var stickyNav = document.querySelector(".sticky-nav");
-
-	if (stickyNav)
+	document.querySelectorAll('.sticky-bloc, .sticky-nav').forEach(stickyBloc =>
 	{
-		var targetRect = stickyNav.getBoundingClientRect();
-		var offsetVal = (targetRect.top + window.scrollY); // Offset Value
-
-		var classes = ["sticky"]; // Classes
-		var targetContainer = document.querySelector(".page-container");
-		var isFillScreenSticky = stickyNav.classList.contains('fill-bloc-top-edge');
-		
-		if (isFillScreenSticky) // Nav in Hero Bloc
+		if (stickyBloc)
 		{
-			targetContainer = document.querySelector(".fill-bloc-top-edge.sticky-nav").parentNode;
-			classes = ["sticky","animated","fadeIn"];
-		}
+			var targetRect = stickyBloc.getBoundingClientRect();
+			var offsetVal = (targetRect.top + window.scrollY); // Offset Value
 
-		if (stickyNav.classList.contains('sticky')) // Use original offset
-		{
-			offsetVal = stickyNav.getAttribute('data-original-offset')
-		}
-
-		var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-		if (currentScrollTop > offsetVal) // Scroll Window
-		{  
-			if (!stickyNav.classList.contains('sticky')) // Add Sticky
+			var classes = ["sticky"]; // Classes
+			var targetContainer = document.querySelector(".page-container");
+			var isFillScreenSticky = stickyBloc.classList.contains('fill-bloc-top-edge');
+			
+			if (isFillScreenSticky) // Nav in Hero Bloc
 			{
-				stickyNav.classList.add.apply(stickyNav.classList,classes);
-				stickyNav.setAttribute("data-original-offset",offsetVal);
+				classes = ["sticky","animated","fadeIn"];
+				targetContainer = document.querySelector(".fill-bloc-top-edge.sticky-nav").parentNode;
+			}
 
-				offsetVal = stickyNav.offsetHeight;
+			// Use stored Bloc offset
+			if (stickyBloc.classList.contains('sticky'))
+			{
+				offsetVal = stickyBloc.getAttribute('data-original-offset')
+			}
 
-				if (isFillScreenSticky)
+			// Get Current Padding Top
+			var paddingTop = 0; 
+
+			// Get Sticky Blocs
+			const stickyElements = document.querySelectorAll('.sticky');
+
+			if (stickyElements.length == 0)
+			{
+				// Current Bloc Height is Heigher Than Padding Top
+				if (targetRect.height > paddingTop)
 				{
-					stickyNav.style.background = getBlocBgColor(targetContainer);
-					offsetVal += parseInt(window.getComputedStyle(targetContainer, null).getPropertyValue('padding-top')); 
+					// Add Bloc Height
+					paddingTop += targetRect.height;
+				}
+			}
+			else
+			{
+				paddingTop = parseInt(window.getComputedStyle(targetContainer, null).getPropertyValue('padding-top')); 
+			}
+
+			// Get Total Stiuck Bloc Height
+			let totalStuckHeight = 0;
+
+			// Loop All Stuck Blocs
+			stickyElements.forEach(element => {
+			    totalStuckHeight += element.offsetHeight;
+			});
+
+			// Get Sticky Offset
+			var stickyOffset = 0;
+
+			if (stickyElements.length > 0)
+			{
+				stickyOffset += totalStuckHeight;
+
+				if (!stickyBloc.classList.contains('sticky'))
+				{
+					offsetVal -= stickyOffset;
+				}
+			}
+
+			// Get Current Scroll Position
+			var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+			// Bloc is on Edge of Screen
+			if (currentScrollTop > offsetVal)
+			{  
+				if (!stickyBloc.classList.contains('sticky')) // Add Sticky
+				{
+					// Store Original Offset Scroll Position
+					stickyBloc.setAttribute("data-original-offset",offsetVal);
+
+					// Add Sticky Class To Bloc
+					stickyBloc.classList.add.apply(stickyBloc.classList,classes);
+
+					if (isFillScreenSticky)
+					{
+						stickyBloc.style.background = getBlocBgColor(targetContainer);
+					}
+
+					// Has Multiple Sticky Elements Adjust Top Padding
+					if (stickyElements.length > 0)
+					{
+						paddingTop += targetRect.height;
+					}
+
+					// Set Page Container Top Padding Position
+					targetContainer.style.paddingTop = paddingTop+'px';
+
+
+					// Set Sticky Bloc Top Position
+					stickyBloc.style.top = stickyOffset+'px';
+				}
+			}
+			else if (stickyBloc.classList.contains('sticky')) // Remove Sticky
+			{
+				// Remove Sticky Attributes From Bloc
+				stickyBloc.classList.remove.apply(stickyBloc.classList,classes);
+				stickyBloc.removeAttribute("style");
+
+				// Reduce Top Padding
+				paddingTop -= targetRect.height;
+
+				if (paddingTop < 0) // Below 0 Reset to 0
+				{
+					paddingTop = 0;
 				}
 
-				targetContainer.style.paddingTop = offsetVal+'px';
+				targetContainer.style.paddingTop = paddingTop+'px';
 			}
 		}
-		else if (stickyNav.classList.contains('sticky')) // Remove Sticky
-		{
-			stickyNav.classList.remove.apply(stickyNav.classList,classes);
-			stickyNav.removeAttribute("style");
-			targetContainer.removeAttribute("style");
-		}
-	}	
+	});
 }
 
 // Get Bloc Background Color
@@ -445,7 +519,7 @@ function scrollBtnVisible()
 	}
 };
 
-// Toggle Visibility
+// Set Up Toggle Visibility
 function setUpVisibilityToggle()
 {
 	document.querySelectorAll("[data-toggle-visibility]").forEach(function(targetObj)
@@ -454,22 +528,25 @@ function setUpVisibilityToggle()
 		{
 			e.preventDefault();
 			var targetID = e.currentTarget.getAttribute('data-toggle-visibility');
-			var targeArray = [targetID];
-
-			if (targetID.indexOf(',')!=-1) // Has multiple targets
-			{
-				targeArray = targetID.split(',');
-			}
-			
-			targeArray.forEach(function(targetID)
-			{
-				toggleVisibility(document.getElementById(targetID));
-			});
+			toggleElementVisibility(targetID);
 		});
 	});
+}
 
-	function toggleVisibility(targetObj)
+// Toggle Visibility
+function toggleElementVisibility(targetID)
+{
+	var targetArray = [targetID];
+
+	if (targetID.indexOf(',')!=-1) // Has multiple targets
 	{
+		targetArray = targetID.split(',');
+	}
+
+	targetArray.forEach(function(targetID) // Loop IDs
+	{
+		var targetObj = document.getElementById(targetID);
+
 		if (targetObj) // Item Exists
 		{
 			if (!targetObj.classList.contains('toggled-item')) // Add toggle class
@@ -500,8 +577,9 @@ function setUpVisibilityToggle()
 
 			reCalculateParallax();
 		}
-	} 
-}
+	});
+
+} 
 
 // Toggle Classes On Objects
 function setUpClassToggle()
@@ -585,8 +663,17 @@ function setUpLightBox()
 			var rightArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32"><path class="lightbox-nav-icon lightbox-next-icon" d="M10.344,2l13,14-13,14"/></svg>';
 			var closeIcon = '<svg class="lightbox-close-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 32 32"><path class="lightbox-close-icon" d="M4,4L28,28"/><path class="lightbox-close-icon" d="M28,4L4,28"/></svg>';
 
+			// Image Tag
+			var imageTag = '<img id="lightbox-image" class="img-fluid mx-auto '+protectionClass+'" src="'+lightBoxPath+'">';
+
+			// Use WebP
+			if (targetJSLightbox.hasAttribute('data-lightbox-webp'))
+			{
+				var lightBoxPathWebP = targetJSLightbox.getAttribute('data-lightbox-webp');
+				imageTag = '<picture><source type="image/webp" id="lightbox-image-webp" srcset="'+lightBoxPathWebP+'">'+imageTag+'</picture>';
+			}
 			
-			var customModal = '<div id="lightbox-modal" class="modal fade"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content '+lightBoxFrame+' blocs-lb-container"><button id="blocs-lightbox-close-btn" type="button" class="close-lightbox" data-bs-dismiss="modal" aria-label="Close">'+closeIcon+'</button><div class="modal-body"><a href="#" class="prev-lightbox" aria-label="prev">'+leftArrow+'</a><a href="#" class="next-lightbox" aria-label="next">'+rightArrow+'</a><img id="lightbox-image" class="img-fluid mx-auto '+protectionClass+'" src="'+lightBoxPath+'"><div id="lightbox-video-container" class="ratio ratio-16x9"><video controls '+autoplay+' class="embed-responsive-item"><source id="lightbox-video" src="'+lightBoxPath+'" type="video/mp4"></video></div><p class="lightbox-caption">'+caption+'</p></div></div></div></div>';
+			var customModal = '<div id="lightbox-modal" class="modal fade"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content '+lightBoxFrame+' blocs-lb-container"><button id="blocs-lightbox-close-btn" type="button" class="close-lightbox" data-bs-dismiss="modal" aria-label="Close">'+closeIcon+'</button><div class="modal-body"><a href="#" class="prev-lightbox" aria-label="prev">'+leftArrow+'</a><a href="#" class="next-lightbox" aria-label="next">'+rightArrow+'</a>'+imageTag+'<div id="lightbox-video-container" class="ratio ratio-16x9"><video controls '+autoplay+' class="embed-responsive-item"><source id="lightbox-video" src="'+lightBoxPath+'" type="video/mp4"></video></div><p class="lightbox-caption">'+caption+'</p></div></div></div></div>';
 		    document.body.insertAdjacentHTML("beforeend",customModal);
 		    setUpLightboxNavigation();
 		    setUpLightboxSwipe();
@@ -685,6 +772,23 @@ function setUpLightBox()
 		{
 			imageUI.setAttribute("src",filePath);
 
+			// Handle WebP Image
+			var webpImageUI = document.querySelector("#lightbox-image-webp");
+
+			if (webpImageUI)
+			{
+				var filePathWebP = filePath;
+
+				// Use WebP
+				if (targetJSLightbox.hasAttribute('data-lightbox-webp'))
+				{
+					filePathWebP = targetJSLightbox.getAttribute('data-lightbox-webp');
+				}
+
+				webpImageUI.setAttribute("srcset",filePathWebP);
+			}
+
+			// Set Capture
 			var caption = targetJSLightbox.getAttribute('data-caption');
 
 			if (caption)
@@ -782,6 +886,22 @@ function setUpLightBox()
 				document.getElementById('blocs-lightbox-close-btn').click();
 		  	}
 		}
+		else if (document.querySelector('.fullscreen-nav, .sidebar-nav'))
+		{
+			if (event.which == 27) // Escape - Close
+			{
+				hideNav();
+			}
+			else if (event.which == 13) // Return Key
+			{
+				const closeHasFocus = document.activeElement.classList.contains('close-special-menu');
+
+				if (closeHasFocus)
+				{
+					hideNav();
+				}
+			}
+		}
 	});
 }
 
@@ -809,6 +929,8 @@ function reCalculateParallax()
 // Add multi level dropdown support
 !function(o){const t="has-child-dropdown-show";var e;o.Dropdown.prototype.toggle=(e=o.Dropdown.prototype.toggle,function(){document.querySelectorAll("."+t).forEach(function(o){o.classList.remove(t)});let o=this._element.closest(".dropdown").parentNode.closest(".dropdown");for(;o&&o!==document;o=o.parentNode.closest(".dropdown"))o.classList.add(t);return e.call(this)}),document.querySelectorAll(".dropdown").forEach(function(o){addDropdownEvent(o)})}(bootstrap);
 function addDropdownEvent(s){s.addEventListener("hide.bs.dropdown",function(s){this.classList.contains("has-child-dropdown-show")&&(this.classList.remove("has-child-dropdown-show"),s.preventDefault()),s.clickEvent&&s.clickEvent.composedPath().some(s=>s.classList&&s.classList.contains("dropdown-toggle")&&s.parentNode.closest(".dropdown-toggle"))&&s.preventDefault(),s.stopPropagation()})};
+
+
 
 
 
